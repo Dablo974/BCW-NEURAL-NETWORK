@@ -10,6 +10,16 @@ interface BiasesType {
   b2: number[];
 }
 
+{/*1. Couleur des lignes :
+Les lignes vertes (#34a853) représentent des poids positifs. Cela signifie que la connexion entre les neurones a un effet excitateur.
+Les lignes rouges (#ea4335) représentent des poids négatifs. Cela signifie que la connexion entre les neurones a un effet inhibiteur.
+
+2. Épaisseur des lignes :
+L'épaisseur des lignes est proportionnelle à la valeur absolue du poids. Plus le poids est grand (en valeur absolue), plus la ligne est épaisse. Cela permet de visualiser l'importance relative des connexions :
+Une ligne épaisse indique un poids élevé (positif ou négatif), ce qui signifie que la connexion a un impact significatif sur l'activation du neurone suivant.
+Une ligne fine indique un poids faible, ce qui signifie que la connexion a un impact moindre.
+*/}
+
 const NeuralNetwork: React.FC = () => {
   const [weights, setWeights] = useState<WeightsType | null>(null);
   const [biases, setBiases] = useState<BiasesType | null>(null);
@@ -25,7 +35,7 @@ const NeuralNetwork: React.FC = () => {
   }, []);
 
   const Neuron: React.FC<{ x: number; y: number; radius?: number }> = ({ x, y, radius = 20 }) => (
-    <circle cx={x} cy={y} r={radius} fill="#4a90e2" />
+    <circle cx={x} cy={y} r={radius} style={{ fill: '#4a90e2' }} />
   );
 
   const Connection: React.FC<{ startX: number; startY: number; endX: number; endY: number; weight: number }> = 
@@ -49,7 +59,7 @@ const NeuralNetwork: React.FC = () => {
   }
 
   return (
-    <svg width="800" height="600" style={{border: '1px solid #ccc'}}>
+    <svg width="100%" height="100vh" viewBox="0 0 800 2000" style={{border: '1px solid #ccc'}}>
       {/* Input Layer */}
       {weights.w1.map((_, i) => (
         <Neuron key={`input-${i}`} x={50} y={50 + i * 40} />
@@ -57,11 +67,11 @@ const NeuralNetwork: React.FC = () => {
       
       {/* Hidden Layer */}
       {biases.b1.map((_, i) => (
-        <Neuron key={`hidden-${i}`} x={400} y={20 + i * 18} />
+        <Neuron key={`hidden-${i}`} x={400} y={50 + i * 40} />
       ))}
       
       {/* Output Layer */}
-      <Neuron x={750} y={300} />
+      <Neuron x={750} y={50 + biases.b1.length * 20} />
       
       {/* Connections from Input to Hidden */}
       {weights.w1.map((neuronWeights, i) => 
@@ -71,7 +81,7 @@ const NeuralNetwork: React.FC = () => {
             startX={70} 
             startY={50 + i * 40} 
             endX={380} 
-            endY={20 + j * 18} 
+            endY={50 + j * 40} 
             weight={weight} 
           />
         ))
@@ -82,17 +92,17 @@ const NeuralNetwork: React.FC = () => {
         <Connection 
           key={`w2-${i}`}
           startX={420} 
-          startY={20 + i * 18} 
+          startY={50 + i * 40} 
           endX={730} 
-          endY={300} 
+          endY={50 + biases.b1.length * 20} 
           weight={weight} 
         />
       ))}
       
       {/* Layer Labels */}
       <text x="50" y="30" textAnchor="middle">Input</text>
-      <text x="400" y="10" textAnchor="middle">Hidden</text>
-      <text x="750" y="330" textAnchor="middle">Output</text>
+      <text x="400" y="30" textAnchor="middle">Hidden</text>
+      <text x="750" y={70 + biases.b1.length * 20} textAnchor="middle">Output</text>
     </svg>
   );
 };
