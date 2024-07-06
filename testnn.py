@@ -40,7 +40,7 @@ def student_model_train():
         pkl.dump(obj=classif_model, file=f)
 
     # Save weights and biases
-    classif_model.save_weights_and_biases('model_params.json')
+    classif_model.save_weights_and_biases('my-neural-network-app/public/model_params.json')
 
     return X_test, y_test
 
