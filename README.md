@@ -1,0 +1,1 @@
+RUN the testnn.py file to save the model. A file.txt give summary of the prediction. You can go in the my-neural-network-app folder and run npm start. Go on localhost:3000 to see your Neural network representation.
